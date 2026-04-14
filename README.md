@@ -4,12 +4,6 @@ Hệ thống quản lý bãi đỗ xe thông minh sử dụng thị giác máy t
 
 ## Demo Hệ Thống
 
-<div align="center">
-  <video src="assets/demo.mp4" width="100%" controls autoplay loop muted>
-    Trình duyệt của bạn không hỗ trợ xem video.
-  </video>
-</div>
-
 ---
 
 ## Các tính năng nổi bật
@@ -37,50 +31,65 @@ Hệ thống quản lý bãi đỗ xe thông minh sử dụng thị giác máy t
 
 Sử dụng pip để cài đặt các thư viện cần thiết:
 
-````bash
-pip install torch torchvision opencv-python numpy pillow scikit-learn
+```bash
+pip install -r requirements.txt
+```
 
 ### 2. Thiết lập vùng đỗ xe (ROI)
+
 Chạy công cụ vẽ để xác định các vị trí ô đỗ xe:
+
 ```bash
 python draw_roi.py
+```
 
-* **Chuột trái**: Click chọn 4 góc của một ô đỗ xe để tạo 1 vùng ROI.
-* **Chuột phải và kéo**: Di chuyển góc nhìn khi đang phóng to.
-* **Lăn chuột hoặc phím +/-**: Phóng to hoặc thu nhỏ khung hình.
-* **Phím S**: Lưu danh sách tọa độ vào tệp rois.json.
+- **Chuột trái**: Click chọn 4 góc của một ô đỗ xe để tạo 1 vùng ROI.
+- **Chuột phải và kéo**: Di chuyển góc nhìn khi đang phóng to.
+- **Lăn chuột hoặc phím +/-**: Phóng to hoặc thu nhỏ khung hình.
+- **Phím S**: Lưu danh sách tọa độ vào tệp rois.json.
 
 ### 3. Thu thập dữ liệu gán nhãn
+
 Tiến hành thu thập ảnh mẫu cho từng trạng thái:
+
 ```bash
 python collect_data.py
+```
 
-Click chuột vào ô đỗ: Chọn ô cần gán nhãn.
-* **Phím E**: Gán nhãn là Trống (Empty).
-* **Phím O**: Gán nhãn là Có xe (Occupied).
-* **Phím S**: Lưu các ảnh đã gán nhãn và tự động nhảy qua 30 khung hình tiếp theo.
-* **Phím A**: Tự động lưu tất cả các ô trong khung hình hiện tại là Trống.
+- **Click chuột vào ô đỗ**: Chọn ô cần gán nhãn.
+- **Phím E**: Gán nhãn là Trống (Empty).
+- **Phím O**: Gán nhãn là Có xe (Occupied).
+- **Phím S**: Lưu các ảnh đã gán nhãn và tự động nhảy qua 30 khung hình tiếp theo.
+- **Phím A**: Tự động lưu tất cả các ô trong khung hình hiện tại là Trống.
 
 ### 4. Huấn luyện mô hình
+
 Chạy script huấn luyện sau khi đã chuẩn bị đủ dữ liệu trong thư mục **dataset/**:
+
 ```bash
 python train_classification.py
-Mô hình tốt nhất sẽ được lưu tại đường dẫn weights/best.pth.
+```
+
+Mô hình tốt nhất sẽ được lưu tại đường dẫn **weights/best.pth**.
 
 ### 5. Triển khai hệ thống
+
 Khởi chạy hệ thống nhận diện thực tế trên luồng video:
+
 ```bash
 python main.py
+```
 
 ## Cơ chế hoạt động của hệ thống chính
-### Tính năng Alignment (Chống rung): Cứ sau mỗi 90 khung hình, hệ thống sẽ thực hiện so sánh các điểm đặc trưng giữa khung hình hiện tại và ảnh gốc (reference_frame.jpg) bằng thuật toán ORB để tính toán ma trận dịch chuyển.
 
-### Xử lý đa luồng (Threading): Các tác vụ nặng như chạy AI nhận diện và tính toán căn chỉnh camera được đặt trong các luồng riêng biệt để tránh gây hiện tượng giật lag cho khung hình hiển thị.
+- **Tính năng Alignment (Chống rung)**: Cứ sau mỗi 90 khung hình, hệ thống sẽ thực hiện so sánh các điểm đặc trưng giữa khung hình hiện tại và ảnh gốc (reference_frame.jpg) bằng thuật toán ORB để tính toán ma trận dịch chuyển.
 
-### Cơ chế Debounce (Lọc nhiễu): Trạng thái của một ô đỗ xe chỉ được cập nhật nếu kết quả nhận diện từ mô hình AI ổn định trong liên tiếp 5 khung hình.
+- **Xử lý đa luồng (Threading)**: Các tác vụ nặng như chạy AI nhận diện và tính toán căn chỉnh camera được đặt trong các luồng riêng biệt để tránh gây hiện tượng giật lag cho khung hình hiển thị.
+
+- **Cơ chế Debounce (Lọc nhiễu)**: Trạng thái của một ô đỗ xe chỉ được cập nhật nếu kết quả nhận diện từ mô hình AI ổn định trong liên tiếp 5 khung hình.
 
 ## Lưu ý quan trọng
-### Người dùng cần chuẩn bị một ảnh chụp khung hình chuẩn đặt tên là reference_frame.jpg trong thư mục gốc để làm mốc neo cho tính năng chống rung camera.
 
-### Mặc định hệ thống tìm kiếm video tại đường dẫn ./data/14191689_1920_1080_30fps.mp4, bạn có thể thay đổi đường dẫn này trong các tệp script tương ứng.
-````
+- **Reference Image**: Bắt buộc có tệp reference_frame.jpg tại thư mục gốc để làm mốc neo.
+
+- **Video Source**: Mặc định là ./data/14191689_1920_1080_30fps.mp4. Bạn có thể tùy chỉnh đường dẫn trong code.
