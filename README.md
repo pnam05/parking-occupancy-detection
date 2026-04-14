@@ -1,10 +1,14 @@
+
+
 # Smart Parking Management System
 
 Hệ thống quản lý bãi đỗ xe thông minh sử dụng thị giác máy tính (**OpenCV**) và học sâu (**Deep Learning - MobileNetV3**). Hệ thống có khả năng tự động nhận diện trạng thái còn trống hoặc đã có xe của từng ô đỗ dựa trên vùng nhận diện (ROI) được thiết lập trước.
 
 ## Demo Hệ Thống
-
+[![Watch Demo](https://img.youtube.com/vi/BJS-j8APMnI/0.jpg)](https://youtu.be/BJS-j8APMnI)
 ---
+
+
 
 ## Các tính năng nổi bật
 
