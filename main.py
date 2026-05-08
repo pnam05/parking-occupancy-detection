@@ -243,4 +243,3 @@ while True:
 
 cap.release()
 cv2.destroyAllWindows()
-print("[SYSTEM] Đã tắt an toàn.")
