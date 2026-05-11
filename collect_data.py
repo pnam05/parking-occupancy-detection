@@ -2,7 +2,7 @@ import cv2
 import json
 import numpy as np
 import os
-from util import crop_polygon, get_slot_center, point_in_polygon
+from utils import crop_polygon, get_slot_center, point_in_polygon
 
 VIDEO_PATH = "./data/14191689_1920_1080_30fps.mp4" 
 ROI_PATH = "rois.json"
